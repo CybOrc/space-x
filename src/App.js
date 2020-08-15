@@ -11,7 +11,7 @@ class app extends React.Component {
       loaded: false,
       error: null,
       sort: null ,
-      selected:null
+      rocketId:null
     };
   };
 
@@ -34,13 +34,18 @@ class app extends React.Component {
 
   handleClick = (e) => {
     e.preventDefault();
-    this.setState({selected:e.target.id});
+    if (this.state.rocketId === null) {
+      let id = e.target.id;
+      this.setState({rocketId:id});      
+    }else{
+      this.setState({rocketId:null});
+    }
   };
 
 
 
   render() {
-    const { error, loaded, data, selected } = this.state;
+    const { error, loaded, data, rocketId } = this.state;
     if (error) {
       return <div>Error: {error.message}</div>;
     } 
@@ -52,8 +57,8 @@ class app extends React.Component {
 
     return (
       <main className="u-padding">
-        {<Table data={this.state.data} handleClick={this.handleClick} />}
-        {<Details selected={this.state.selected}/>}
+        {<Table rockets={data} handleClick={this.handleClick} rocketId={rocketId} />}
+        {<Details rocketId={rocketId} data={data} />}
       </main>
       );
   }

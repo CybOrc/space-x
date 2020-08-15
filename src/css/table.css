@@ -1,0 +1,32 @@
+* {
+	font-family: Arial,Verdana,sans-serif;
+}
+
+.c-rocket-table {
+	display: table;
+	margin: 1em 0;
+}
+
+.c-rocket-table__row{
+	display: table-row;
+}
+
+.c-rocket-table__row:nth-child(even){
+	background-color: lightgrey;
+}
+
+.c-rocket-table__cell{
+	display: table-cell;
+	text-align: center;
+	border: solid 1px grey;
+	padding: 5px;
+	vertical-align: middle;
+}
+
+.u-nowrap {
+	white-space: nowrap;
+}
+
+.c-rocket-table__hide {
+	display: none;
+}
