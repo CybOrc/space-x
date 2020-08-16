@@ -42,8 +42,6 @@ class app extends React.Component {
     }
   };
 
-
-
   render() {
     const { error, loaded, data, rocketId } = this.state;
     if (error) {
