@@ -1,5 +1,9 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+##Dependencies
+  This requires both Inuit CSS for stylings and React JS. 
+  Inuit instuctions can be found here. https://github.com/inuitcss/inuitcss
+  
 ## Available Scripts
 
 In the project directory, you can run:
