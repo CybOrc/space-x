@@ -29,31 +29,31 @@ class Details extends React.Component {
 	componentDidMount(){
 		const url = "https://api.spacexdata.com/v4/launches";
 		const ship = this.props.rocketId;
-	// read latest entities
-	fetch(url, {
-	      "method": "GET"
-	    })
-	  .then(data => data.json())
-	  .then(data => {
-	  	data.forEach(launch => {
-	  		if(launch.rocket === ship ){
-	  			this.setState({
-	          		launches: this.state.launches.concat(launch)
-	          	});
-	  		}
-	  	})
-	  })
-	  .catch(err => { console.log(err); 
-	});
+
+		fetch(url, {
+		      "method": "GET"
+		    })
+		  .then(data => data.json())
+		  .then(data => {
+		  	data.forEach(launch => {
+		  		if(launch.rocket === ship ){
+		  			this.setState({
+		          		launches: this.state.launches.concat(launch)
+		          	});
+		  		}
+		  	})
+		  })
+		  .catch(err => { console.log(err); 
+		});
 	};
 
 	render() {
 		const rocketId = this.props.rocketId;
 		const data = this.props.data;
 		const launches = this.state.launches;
-		const sortedField = this.state.sortedField;
 		const ascending = this.state.ascending;
 		const rocketDetails = (data.filter( obj => { return obj.id === rocketId } ))[0];
+		const sortedField = this.state.sortedField;
 		let sortedLaunches = [...launches];
 
 		function getStatus(date_unix,status) {
@@ -65,7 +65,6 @@ class Details extends React.Component {
 		}
 
 		if (sortedField !== null) {
-
 		    sortedLaunches.sort((a, b) => {
 		      if (a[sortedField] < b[sortedField]) {
 		        return (ascending) ? -1 : 1 ;
@@ -77,6 +76,28 @@ class Details extends React.Component {
 		    });
 		  }
 
+		const launchesTableHeader =(<div className="c-rocket-table__row"> 
+										<div className="c-rocket-table__cell">
+											<button type="button" data="date_utc" onClick={ this.handleClick }>Date</button>
+										</div>
+										<div className="c-rocket-table__cell">
+											<button type="button" data="success" onClick={ this.handleClick }>Status</button>
+										</div>
+										<div className="c-rocket-table__cell">
+											Details
+										</div>
+									</div>);
+
+		const launchesTable = sortedLaunches.map(launch => (
+								<div key={launch.id} className="c-rocket-table__row"> 
+									<div className="c-rocket-table__cell">{launch.date_utc}</div>
+									<div className="c-rocket-table__cell">{
+										getStatus(launch.date_unix,launch.success) 
+									}
+									</div>
+									<div className="c-rocket-table__cell">{launch.details}</div>
+								</div>));
+
 
 		if(rocketId) {
 			return(
@@ -84,6 +105,7 @@ class Details extends React.Component {
 					<div className="o-layout">
 						<div className="o-layout__item u-1/2">
 							<h1 className="u-margin-horizontal"> {rocketDetails.name}</h1>
+                			<p className="u-margin-horizontal">{rocketDetails.description}</p>   
 							<ul >
 								<li className="o-layout__item u-1/2  u-padding-none">Height: {rocketDetails.height.meters}m</li>
 								<li className="o-layout__item u-1/2  u-padding-none">Diameter: {rocketDetails.diameter.meters}m</li>
@@ -95,29 +117,12 @@ class Details extends React.Component {
 						<div className="o-layout__item u-1/2">
 							<img className="u-margin-right" alt={rocketDetails.name} src={rocketDetails.flickr_images[0]} />
 						</div>
-						<h1 className="u-margin-horizontal"> Launches</h1>
 					</div>
 					<div className="c-rocket-table" >
-						<div className="c-rocket-table__row"> 
-							<div className="c-rocket-table__cell">
-								<button type="button" data="date_utc" onClick={ this.handleClick }>Date</button>
-							</div>
-							<div className="c-rocket-table__cell">
-								<button type="button" data="success" onClick={ this.handleClick }>Status</button>
-							</div>
-							<div className="c-rocket-table__cell">
-								Details
-							</div>
-						</div>
-						{sortedLaunches.map(launch => (
-						<div key={launch.id} className="c-rocket-table__row"> 
-							<div className="c-rocket-table__cell">{launch.date_utc}</div>
-							<div className="c-rocket-table__cell">{
-								getStatus(launch.date_unix,launch.success) 
-							}
-							</div>
-							<div className="c-rocket-table__cell">{launch.details}</div>
-						</div>))}
+						<h1 className="u-margin-horizontal"> Launches</h1>
+						{(sortedLaunches.length > 0) ? launchesTableHeader : <p className="u-margin-horizontal">This vessel has yet to peform any launches</p>}
+						{(sortedLaunches.length > 0) ? launchesTable : ""}
+						
 					</div>
 				</section>
 				)
