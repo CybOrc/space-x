@@ -2,9 +2,15 @@
 	font-family: Arial,Verdana,sans-serif;
 }
 
+main {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
 .c-rocket-table {
 	display: table;
 	margin: 1em 0;
+	width: 100%;
 }
 
 .c-rocket-table__row{

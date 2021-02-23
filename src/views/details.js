@@ -1,82 +1,83 @@
 import React from 'react';
 
 class Details extends React.Component {
-	constructor(props) {
-		super(props);
+    constructor(props) {
+        super(props);
 
-		this.state = {
-			launches:[],
-			sortedField:null,
-			ascending:true
-		};
-	};
+        this.state = {
+            launches: [],
+            sortedField: null,
+            ascending: true
+        };
+    };
 
-	componentDidUpdate(nextProps){
-	    if(nextProps.rocketId !== this.props.rocketId) {
-	    	this.setState({	launches: [] });
-	     	this.componentDidMount();
-	    }
-	}
+    componentDidUpdate(nextProps) {
+        if (nextProps.rocketId !== this.props.rocketId) {
+            this.setState({ launches: [] });
+            this.componentDidMount();
+        }
+    }
 
-	handleClick = (e) => {
-	    e.preventDefault();
-	    if(this.state.sortedField === e.target.getAttribute('data') ) {
-	    	this.setState({ascending: !this.state.ascending});
-	    }	    
-	    this.setState({sortedField: e.target.getAttribute('data') });
-	  };
+    handleClick = (e) => {
+        e.preventDefault();
+        if (this.state.sortedField === e.target.getAttribute('data')) {
+            this.setState({ ascending: !this.state.ascending });
+        }
+        this.setState({ sortedField: e.target.getAttribute('data') });
+    };
 
-	componentDidMount(){
-		const url = "https://api.spacexdata.com/v4/launches";
-		const ship = this.props.rocketId;
+    componentDidMount() {
+        const url = "https://api.spacexdata.com/v4/launches";
+        const ship = this.props.rocketId;
 
-		fetch(url, {
-		      "method": "GET"
-		    })
-		  .then(data => data.json())
-		  .then(data => {
-		  	data.forEach(launch => {
-		  		if(launch.rocket === ship ){
-		  			this.setState({
-		          		launches: this.state.launches.concat(launch)
-		          	});
-		  		}
-		  	})
-		  })
-		  .catch(err => { console.log(err); 
-		});
-	};
+        fetch(url, {
+                "method": "GET"
+            })
+            .then(data => data.json())
+            .then(data => {
+                data.forEach(launch => {
+                    if (launch.rocket === ship) {
+                        this.setState({
+                            launches: this.state.launches.concat(launch)
+                        });
+                    }
+                })
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    };
 
-	render() {
-		const rocketId = this.props.rocketId;
-		const data = this.props.data;
-		const launches = this.state.launches;
-		const ascending = this.state.ascending;
-		const rocketDetails = (data.filter( obj => { return obj.id === rocketId } ))[0];
-		const sortedField = this.state.sortedField;
-		let sortedLaunches = [...launches];
+    render() {
+        const rocketId = this.props.rocketId;
+        const data = this.props.data;
+        const launches = this.state.launches;
+        const ascending = this.state.ascending;
+        const rocketDetails = (data.filter(obj => { return obj.id === rocketId }))[0];
+        const sortedField = this.state.sortedField;
+        let sortedLaunches = [...launches];
 
-		function getStatus(date_unix,status) {
-			let time = Math.round(new Date().getTime()/1000);
-			if (date_unix > time ) {
-				return "Upcoming"
-			}
-			return (status)? "Successful" : "Failed"
-		}
+        function getStatus(date_unix, status) {
+            let time = Math.round(new Date().getTime() / 1000);
+            if (date_unix > time) {
+                return "Upcoming"
+            }
+            return (status) ? "Successful" : "Failed"
+        }
 
-		if (sortedField !== null) {
-		    sortedLaunches.sort((a, b) => {
-		      if (a[sortedField] < b[sortedField]) {
-		        return (ascending) ? -1 : 1 ;
-		      }
-		      if (a[sortedField] > b[sortedField]) {
-		        return (ascending) ? 1 : -1;
-		      }
-		      return 0;
-		    });
-		  }
+        if (sortedField !== null) {
+            sortedLaunches.sort((a, b) => {
+                if (a[sortedField] < b[sortedField]) {
+                    return (ascending) ? -1 : 1;
+                }
+                if (a[sortedField] > b[sortedField]) {
+                    return (ascending) ? 1 : -1;
+                }
+                return 0;
+            });
+        }
 
-		const launchesTableHeader =(<div className="c-rocket-table__row"> 
+        const launchesTableHeader = (<div className="c-rocket-table__row"> 
 										<div className="c-rocket-table__cell">
 											<button type="button" data="date_utc" onClick={ this.handleClick }>Date</button>
 										</div>
@@ -88,8 +89,8 @@ class Details extends React.Component {
 										</div>
 									</div>);
 
-		const launchesTable = sortedLaunches.map(launch => (
-								<div key={launch.id} className="c-rocket-table__row"> 
+        const launchesTable = sortedLaunches.map(launch => (
+            <div key={launch.id} className="c-rocket-table__row"> 
 									<div className="c-rocket-table__cell">{launch.date_utc}</div>
 									<div className="c-rocket-table__cell">{
 										getStatus(launch.date_unix,launch.success) 
@@ -99,9 +100,9 @@ class Details extends React.Component {
 								</div>));
 
 
-		if(rocketId) {
-			return(
-				<section>
+        if (rocketId) {
+            return (
+                <section>
 					<div className="o-layout">
 						<div className="o-layout__item u-1/2">
 							<h1 className="u-margin-horizontal"> {rocketDetails.name}</h1>
@@ -115,7 +116,7 @@ class Details extends React.Component {
 							</ul>
 						</div>
 						<div className="o-layout__item u-1/2">
-							<img className="u-margin-right" alt={rocketDetails.name} src={rocketDetails.flickr_images[0]} />
+							<img className="u-margin-right u-1/1" alt={rocketDetails.name} src={rocketDetails.flickr_images[0]} />
 						</div>
 					</div>
 					<div className="c-rocket-table" >
@@ -125,11 +126,11 @@ class Details extends React.Component {
 						
 					</div>
 				</section>
-				)
-		}else {
-			return("Select a Rocket")
-		}
-		
-	}
+            )
+        } else {
+            return ("Select a Rocket")
+        }
+
+    }
 }
 export default Details;

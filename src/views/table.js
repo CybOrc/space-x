@@ -1,49 +1,49 @@
 import React from 'react';
 
 class Table extends React.Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.state = {
-      sortThisField:null,
-      ascending:true
-    };
-  };
-
-  handleClick = (e) => {
-      e.preventDefault();
-      if(this.state.sortThisField === e.target.getAttribute('data') ) {
-        this.setState({ascending: !this.state.ascending});
-      }     
-      this.setState({sortThisField: e.target.getAttribute('data') });
+        this.state = {
+            sortThisField: null,
+            ascending: true
+        };
     };
 
+    handleClick = (e) => {
+        e.preventDefault();
+        if (this.state.sortThisField === e.target.getAttribute('data')) {
+            this.setState({ ascending: !this.state.ascending });
+        }
+        this.setState({ sortThisField: e.target.getAttribute('data') });
+    };
 
-  render() {
-  	const rockets = this.props.rockets;
-  	const rocketId = this.props.rocketId;
-    const sortThisField = this.state.sortThisField;
-    const ascending = this.state.ascending;
-    let sortedRockets = [...rockets];
 
-
-
-    if (sortThisField !== null) {
-        sortedRockets.sort((a, b) => {
-          if (a[sortThisField] < b[sortThisField]) {
-            return (ascending) ? -1 : 1 ;
-          }
-          if (a[sortThisField] > b[sortThisField]) {
-            return (ascending) ? 1 : -1;
-          }
-          return 0;
-        });
-      }
+    render() {
+        const rockets = this.props.rockets;
+        const rocketId = this.props.rocketId;
+        const sortThisField = this.state.sortThisField;
+        const ascending = this.state.ascending;
+        let sortedRockets = [...rockets];
 
 
 
-  	return(
-  		<section className="c-rocket-table u-1/1">
+        if (sortThisField !== null) {
+            sortedRockets.sort((a, b) => {
+                if (a[sortThisField] < b[sortThisField]) {
+                    return (ascending) ? -1 : 1;
+                }
+                if (a[sortThisField] > b[sortThisField]) {
+                    return (ascending) ? 1 : -1;
+                }
+                return 0;
+            });
+        }
+
+
+
+        return (
+            <section className="c-rocket-table u-1/1">
           
           <div className="c-rocket-table__row">
               <div className="c-rocket-table__cell">
@@ -84,7 +84,7 @@ class Table extends React.Component {
           ))}
 
         </section>
-  	)
-  }
+        )
+    }
 }
 export default Table;
